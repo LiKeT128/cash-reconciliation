@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cash reconciliation · 30 June 2026</title>
+  <style>
+    body { margin: 0; background: #f7f7f5; color: #161616; font-family: "Segoe UI", sans-serif; }
+    main { width: min(880px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 64px; }
+    header { display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid #161616; padding-bottom: 12px; }
+    h1 { font-size: 22px; margin: 0; font-weight: 650; }
+    h2 { font-size: 15px; margin: 28px 0 8px; }
+    p { margin: 4px 0; }
+    .meta { font-size: 13px; text-align: right; }
+    .nil { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 14px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; font-variant-numeric: tabular-nums; }
+    th, td { border: 1px solid #d0d0d0; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #efefec; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+    td:last-child, .bridge td:nth-child(2) { text-align: right; font-family: Consolas, "Courier New", monospace; }
+    .bridge tr:last-child td { font-weight: 700; }
+    .bridge tr:nth-last-child(2) td { border-top: 2px solid #161616; }
+    footer { margin-top: 28px; font-size: 12px; color: #444; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <p>Atelier Ledger s.r.o. · fictional</p>
+      <h1>Cash reconciliation</h1>
+      <p>Bank statement to the general ledger · 30 June 2026</p>
+    </div>
+    <div class="meta">
+      <p>Workpaper C-1</p>
+      <p>Prepared 2 July 2026</p>
+      <p>Currency EUR</p>
+    </div>
+  </header>
+  <p class="nil">Unexplained difference: nil</p>
+  <h2>Bridge</h2>
+  <table><thead><tr><th>Line</th><th>Amount</th><th>Tick</th></tr></thead><tbody><tr><td>Balance per general ledger, 30 Jun 2026</td><td>-€7,108</td><td></td></tr><tr><td>Outstanding payments, on the books only</td><td>€6,960</td><td>a</td></tr><tr><td>Deposits in transit, on the books only</td><td>-€7,400</td><td>b</td></tr><tr><td>Bank charges not booked</td><td>-€35</td><td>c</td></tr><tr><td>Interest not booked</td><td>€11</td><td>c</td></tr><tr><td>Card settlement REC-77, books minus statement</td><td>-€9,000</td><td>d</td></tr><tr><td>Balance per bank statement, 30 Jun 2026</td><td>-€16,572</td><td></td></tr><tr><td>Unexplained</td><td>€0</td><td></td></tr></tbody></table>
+  <h2>a–b · On the ledger, not on the statement</h2>
+  <table><thead><tr><th>Date</th><th>Ref</th><th>Description</th><th>Amount</th></tr></thead><tbody><tr><td>2026-06-30</td><td>PAY-901</td><td>Supplier payment, sent 30 Jun</td><td>-€4,200</td></tr><tr><td>2026-06-29</td><td>PAY-902</td><td>Supplier payment, sent 29 Jun</td><td>-€1,800</td></tr><tr><td>2026-06-30</td><td>PAY-903</td><td>Supplier payment, sent 30 Jun</td><td>-€960</td></tr><tr><td>2026-06-30</td><td>DEP-902</td><td>Customer receipt, lodged 30 Jun</td><td>€2,300</td></tr><tr><td>2026-06-30</td><td>DEP-901</td><td>Customer receipt, lodged 30 Jun</td><td>€5,100</td></tr></tbody></table>
+  <p>Open ledger lines are listed once. Payments are negative, deposits in transit are positive. Tick b is the positive rows.</p>
+  <h2>c · On the statement, not in the books · -€24</h2>
+  <table><thead><tr><th>Date</th><th>Ref</th><th>Description</th><th>Amount</th></tr></thead><tbody><tr><td>2026-06-30</td><td>FEE-06</td><td>Account maintenance</td><td>-€35</td></tr><tr><td>2026-06-30</td><td>INT-06</td><td>Credit interest</td><td>€11</td></tr></tbody></table>
+  <h2>d · Same reference, different amount</h2>
+  <table><thead><tr><th>Date</th><th>Ref</th><th>Books</th><th>Statement</th><th>Difference</th></tr></thead><tbody><tr><td>2026-06-14</td><td>REC-77</td><td>€10,000</td><td>€1,000</td><td>€9,000</td></tr></tbody></table>
+  <h2>Agreed without a shared reference</h2>
+  <table><thead><tr><th>Ledger date</th><th>Statement date</th><th>Ledger ref</th><th>Statement ref</th><th>Amount</th></tr></thead><tbody><tr><td>2026-06-28</td><td>2026-06-30</td><td>DEP-441</td><td>—</td><td>€7,770</td></tr><tr><td>2026-06-29</td><td>2026-06-30</td><td>DEP-442</td><td>—</td><td>€2,460</td></tr></tbody></table>
+  <p>32 further lines agreed on reference and amount. They are in both balances and drop out of the bridge. Query: sql/01_exact.sql.</p>
+  <footer>
+    Matching rules are views in schema.sql. Exact reference, then amount-and-date within two days, then whatever is left.
+    An amount break is not called a timing difference. The population is synthetic. The unexplained line is a check, not a label: if a line is missing from the lists, it stops being zero.
+  </footer>
+</main>
+</body>
+</html>
